@@ -49,7 +49,7 @@ public class CustomDispatcherServlet extends HttpServlet {
             return;
         }
         try {
-            response = (HttpServletResponse) handler.getMethod().invoke(handler.getHandlerObject(),request,response);
+            handler.getMethod().invoke(handler.getHandlerObject(),request,response);
         } catch (ReflectiveOperationException e) {
             throw new HandlerInvocationException(e);
         }

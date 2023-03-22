@@ -23,38 +23,35 @@ public class LoginController {
     private final UserDAO userDAO = UserDAO.getInstance();
 
     @RequestMapping(url = "/login", method = HttpMethod.POST)
-    public HttpServletResponse login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UserDTO dto = jsonMapper.readValue(request.getReader(), UserDTO.class);
         if (userDAO.verifyUserbyLoginAndPasword(dto.getLogin(),dto.getPassword())) {
             JwtService jwtService = JwtService.getInstance();
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             out.println(jwtService.buildJwtForUser(userDAO.getByLogin(dto.getLogin()).get()));
-            return response;
         } else {
-            return sendError(401, "Login and/or password is incorrect", response);
+            sendError(401, "Login and/or password is incorrect", response);
         }
 
 
     }
 
     @RequestMapping(url = "/register", method = HttpMethod.POST)
-    public HttpServletResponse register(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void register(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UserDTO dto = jsonMapper.readValue(request.getReader(), UserDTO.class);
         if (userDAO.save(userMapper.userDTOToUser(dto))) {
             response.setContentType("application/json");
             response.setStatus(201);
-            return response;
         } else {
-            return sendError(409, "Login already taken", response);
+            sendError(409, "Login already taken", response);
         }
     }
 
-    private HttpServletResponse sendError(int errorCode, String errorReason, HttpServletResponse response) throws IOException {
+    private void sendError(int errorCode, String errorReason, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         response.setStatus(errorCode);
         PrintWriter out = response.getWriter();
         out.println(errorReason);
-        return response;
     }
 }

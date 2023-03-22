@@ -25,13 +25,12 @@ public class EmployeeController {
     private final EmployeeDAO employeeDAO = EmployeeDAO.getInstance();
 
     @RequestMapping(url = "/employee", method = HttpMethod.GET)
-    public HttpServletResponse getEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void getEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("id") == null) {
             List<Employee> employeeList = employeeDAO.getAll();
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
             out.println(jsonMapper.writeValueAsString(employeeList));
-            return response;
         } else {
             Optional<Employee> employeeOptional = employeeDAO.get(Long.parseLong(request.getParameter("id")));
             Employee employee;
@@ -40,59 +39,56 @@ public class EmployeeController {
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 out.print(jsonMapper.writeValueAsString(employee));
-                return response;
             } else {
-                return sendError(404,"No employee found",response);
+                sendError(404,"No employee found",response);
             }
         }
     }
 
     @RequestMapping(url = "/employee", method = HttpMethod.POST)
-    public HttpServletResponse saveEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void saveEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
         EmployeeDTO dto = jsonMapper.readValue(request.getReader(), EmployeeDTO.class);
         employeeDAO.save(employeeMapper.employeeDTOToEmployee(dto));
         response.setContentType("application/json");
         response.setStatus(201);
-        return response;
     }
 
     @RequestMapping(url = "/employee", method = HttpMethod.PUT)
-    public HttpServletResponse updateEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void updateEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("id") != null) {
             EmployeeDTO dto = jsonMapper.readValue(request.getReader(), EmployeeDTO.class);
             if (employeeDAO.update(employeeMapper.employeeDTOWithExternalIDToEmployee(dto,Long.parseLong(request.getParameter("id"))))) {
-                return response;
+                return;
             }
             else {
-                return sendError(404,"No employee found to update",response);
+                sendError(404,"No employee found to update",response);
             }
         } else {
-            return sendError(400,"No parameter present",response);
+            sendError(400,"No parameter present",response);
         }
     }
 
 
 
     @RequestMapping(url = "/employee", method = HttpMethod.DELETE)
-    public HttpServletResponse deleteEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void deleteEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (request.getParameter("id") != null) {
             if (employeeDAO.deleteById(Long.parseLong(request.getParameter("id")))) {
-                return response;
+                return;
             }
             else {
-                return sendError(404,"No employee found",response);
+                sendError(404,"No employee found",response);
             }
         } else {
-            return sendError(400,"No parameter present",response);
+            sendError(400,"No parameter present",response);
         }
     }
 
-    private HttpServletResponse sendError(int errorCode, String errorReason, HttpServletResponse response) throws IOException {
+    private void sendError(int errorCode, String errorReason, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         response.setStatus(errorCode);
         PrintWriter out = response.getWriter();
         out.println(errorReason);
-        return response;
     }
 
 
