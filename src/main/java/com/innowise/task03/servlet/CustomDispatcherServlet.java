@@ -42,7 +42,7 @@ public class CustomDispatcherServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
         HttpHandler handler;
         HttpMapping mapping = HttpMapping.builder().path(pathInfo).method(HttpMethod.valueOf(request.getMethod())).build();
-        handler = controllerHolder.getControllerMap().get(mapping);
+        handler = controllerHolder.getHandlerMapping().get(mapping);
         if (handler == null) {
             handleNotFoundResponce(response);
             return;

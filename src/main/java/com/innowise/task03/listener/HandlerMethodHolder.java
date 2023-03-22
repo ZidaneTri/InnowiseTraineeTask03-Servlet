@@ -5,6 +5,8 @@ import com.innowise.task03.Controller;
 import com.innowise.task03.RequestMapping;
 import org.reflections.Reflections;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,7 +18,7 @@ import static org.reflections.scanners.Scanners.*;
 public class HandlerMethodHolder {
     private static volatile HandlerMethodHolder instance;
 
-    private HashMap<HttpMapping,HttpHandler> controllerMap = new HashMap<>();
+    private HashMap<HttpMapping,HttpHandler> handlerMapping = new HashMap<>();
 
     public static HandlerMethodHolder getInstance() {
         HandlerMethodHolder localInstance = instance;
@@ -31,10 +33,10 @@ public class HandlerMethodHolder {
         return localInstance;
     }
 
-    public HashMap<HttpMapping,HttpHandler> getControllerMap() {
-        if (controllerMap.isEmpty()) {
+    public HashMap<HttpMapping,HttpHandler> getHandlerMapping() {
+        if (handlerMapping.isEmpty()) {
             try {
-                updateControllerMap();
+                updateHandlerMapping();
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
             } catch (InvocationTargetException e) {
@@ -45,10 +47,10 @@ public class HandlerMethodHolder {
                 throw new RuntimeException(e);
             }
         }
-        return controllerMap;
+        return handlerMapping;
     }
 
-    protected void updateControllerMap() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    protected void updateHandlerMapping() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
         Reflections reflections = new Reflections("com.innowise.task03.controller");
 
@@ -57,13 +59,14 @@ public class HandlerMethodHolder {
         for (Class clazz : annotated) {
             Method[] methods = clazz.getDeclaredMethods();
             for (Method method : methods) {
-                Annotation[] annotations = method.getDeclaredAnnotations();
-                for (Annotation annotation : annotations) {
-                    if (annotation instanceof RequestMapping) {
-                        RequestMapping myAnnotation = (RequestMapping) annotation;
-                        HttpMapping newMapping = HttpMapping.builder().path(myAnnotation.url()).method(myAnnotation.method()).build();
-                        if (!this.controllerMap.containsKey(newMapping)) {
-                            this.controllerMap.put(newMapping, HttpHandler.builder()
+                RequestMapping annotation = method.getAnnotation(RequestMapping.class);
+                if(annotation != null) {
+                    Class<?>[] parameterTypes = method.getParameterTypes();
+                    if (parameterTypes.length == 2 & (parameterTypes[0] == HttpServletRequest.class) & (parameterTypes[1] == HttpServletResponse.class)) {
+                        HttpMapping newMapping = HttpMapping.builder().path(annotation.url()).method(annotation.method()).build();
+
+                        if (!this.handlerMapping.containsKey(newMapping)) {
+                            this.handlerMapping.put(newMapping, HttpHandler.builder()
                                     .method(method)
                                     .clazz(clazz)
                                     .handlerObject(clazz.getDeclaredConstructor().newInstance())
@@ -71,12 +74,9 @@ public class HandlerMethodHolder {
                         } else {
                             throw new RuntimeException(); //TODO: replace with my own exception
                         }
-
-                        }
                     }
                 }
             }
         }
-
-
+    }
 }

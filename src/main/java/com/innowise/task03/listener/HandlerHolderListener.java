@@ -12,7 +12,7 @@ public class HandlerHolderListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         HandlerMethodHolder controllerHolder = HandlerMethodHolder.getInstance();
         try {
-            controllerHolder.updateControllerMap();
+            controllerHolder.updateHandlerMapping();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
@@ -22,7 +22,7 @@ public class HandlerHolderListener implements ServletContextListener {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(controllerHolder.getControllerMap().toString());
+        System.out.println(controllerHolder.getHandlerMapping().toString());
     }
 
     @Override
