@@ -1,5 +1,7 @@
 package com.innowise.task03.listener;
 
+import com.innowise.task03.exception.HandlerCreationException;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -13,14 +15,8 @@ public class HandlerHolderListener implements ServletContextListener {
         HandlerMethodHolder controllerHolder = HandlerMethodHolder.getInstance();
         try {
             controllerHolder.updateHandlerMapping();
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new HandlerCreationException("There was an error during handler creation",e);
         }
         System.out.println(controllerHolder.getHandlerMapping().toString());
     }

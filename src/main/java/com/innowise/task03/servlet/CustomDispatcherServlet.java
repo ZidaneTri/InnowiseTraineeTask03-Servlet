@@ -1,5 +1,6 @@
 package com.innowise.task03.servlet;
 
+import com.innowise.task03.exception.HandlerInvocationException;
 import com.innowise.task03.listener.HttpHandler;
 import com.innowise.task03.listener.HttpMapping;
 import com.innowise.task03.listener.HttpMethod;
@@ -49,10 +50,8 @@ public class CustomDispatcherServlet extends HttpServlet {
         }
         try {
             response = (HttpServletResponse) handler.getMethod().invoke(handler.getHandlerObject(),request,response);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
+        } catch (ReflectiveOperationException e) {
+            throw new HandlerInvocationException(e);
         }
 
     }

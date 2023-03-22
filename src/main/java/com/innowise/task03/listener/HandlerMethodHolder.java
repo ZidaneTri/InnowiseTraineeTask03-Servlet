@@ -3,6 +3,8 @@ package com.innowise.task03.listener;
 
 import com.innowise.task03.Controller;
 import com.innowise.task03.RequestMapping;
+import com.innowise.task03.exception.HandlerAlreadyPresentException;
+import com.innowise.task03.exception.HandlerCreationException;
 import org.reflections.Reflections;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,14 +39,8 @@ public class HandlerMethodHolder {
         if (handlerMapping.isEmpty()) {
             try {
                 updateHandlerMapping();
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-            } catch (InstantiationException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
+            }catch (ReflectiveOperationException e) {
+                throw new HandlerCreationException("There was an error during handler creation",e);
             }
         }
         return handlerMapping;
@@ -72,7 +68,7 @@ public class HandlerMethodHolder {
                                     .handlerObject(clazz.getDeclaredConstructor().newInstance())
                                     .build());
                         } else {
-                            throw new RuntimeException(); //TODO: replace with my own exception
+                            throw new HandlerAlreadyPresentException("Handler for path "+ annotation.url() +"and method " + annotation.method().toString() + "is already present");
                         }
                     }
                 }

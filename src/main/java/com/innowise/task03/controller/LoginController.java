@@ -2,7 +2,6 @@ package com.innowise.task03.controller;
 
 import com.innowise.task03.Controller;
 import com.innowise.task03.RequestMapping;
-import com.innowise.task03.entity.*;
 import com.innowise.task03.listener.HttpMethod;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innowise.task03.entity.UserDAO;
