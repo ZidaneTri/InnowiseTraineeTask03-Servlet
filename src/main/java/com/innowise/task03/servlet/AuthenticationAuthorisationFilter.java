@@ -1,6 +1,7 @@
 package com.innowise.task03.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.innowise.task03.entity.Role;
 import com.innowise.task03.entity.UserDAO;
 import com.innowise.task03.entity.UserDTO;
 import com.innowise.task03.service.JwtService;
@@ -55,8 +56,8 @@ public class AuthenticationAuthorisationFilter extends HttpFilter {
                 out.println("Untrusted token");
                 return;
             }
-            String role = claims.getBody().get("role", String.class);
-            if(role.equals("ROLE_CLIENT") & !request.getMethod().equals("GET")) {
+            Role role = Role.valueOf(claims.getBody().get("role", String.class));
+            if(role.equals(Role.CLIENT) & !request.getMethod().equals("GET")) {
                 response.setContentType("application/json");
                 response.setStatus(403);
                 PrintWriter out = response.getWriter();

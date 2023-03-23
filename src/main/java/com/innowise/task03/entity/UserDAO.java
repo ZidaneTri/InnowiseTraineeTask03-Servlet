@@ -40,7 +40,7 @@ public class UserDAO implements DAO<User>{
                         User user = User.builder().id(resultSet.getLong("USER_ID"))
                                 .login(resultSet.getString("LOGIN"))
                                 .password(resultSet.getString("PASSWORD"))
-                                .role(resultSet.getString("ROLE"))
+                                .role(Role.valueOf(resultSet.getString("ROLE")))
                                 .build();
                         return Optional.of(user);
                     }
@@ -63,7 +63,7 @@ public class UserDAO implements DAO<User>{
                         User user = User.builder().id(resultSet.getLong("USER_ID"))
                                 .login(resultSet.getString("LOGIN"))
                                 .password(resultSet.getString("PASSWORD"))
-                                .role(resultSet.getString("ROLE"))
+                                .role(Role.valueOf(resultSet.getString("ROLE")))
                                 .build();
                         return Optional.of(user);
                     }
@@ -86,7 +86,7 @@ public class UserDAO implements DAO<User>{
                         User user = User.builder().id(resultSet.getLong("USER_ID"))
                                 .login(resultSet.getString("LOGIN"))
                                 .password(resultSet.getString("POSITION"))
-                                .role(resultSet.getString("ROLE"))
+                                .role(Role.valueOf(resultSet.getString("ROLE")))
                                 .build();
                         userList.add(user);
                     }
@@ -105,7 +105,7 @@ public class UserDAO implements DAO<User>{
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1,user.getLogin());
                 statement.setString(2,BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray()));
-                statement.setString(3,user.getRole());
+                statement.setString(3,user.getRole().name());
                 statement.executeUpdate();
                 return true;
             }

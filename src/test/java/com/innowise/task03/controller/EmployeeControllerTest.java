@@ -24,8 +24,8 @@ class EmployeeControllerTest {
     private static final String LOGIN = "admin";
     private static final String PASSWORD = "adminpass";
 
-    private static final String ADMIN_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJaaWRhbmUiLCJ1c2VyIjoiQWRtaW4iLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTQ2Njc5NjgyMiwiZXhwIjo0NjIyNDcwNDIyfQ.pkn0dQEh_qKVM48piEMB6UigxWWDRJbWUe-H90XNEZA";
-    private static final String CLIENT_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJaaWRhbmUiLCJ1c2VyIjoiQ2xpZW50Iiwicm9sZSI6IlJPTEVfQ0xJRU5UIiwiaWF0IjoxNDY2Nzk2ODIyLCJleHAiOjQ2MjI0NzA0MjJ9.nihihJSDCJ6Lt-YxZDau03hdbXN9Varcju05vhDbZGk";
+    private static final String ADMIN_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJaaWRhbmUiLCJ1c2VyIjoiQWRtaW4iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE0NjY3OTY4MjIsImV4cCI6NDYyMjQ3MDQyMn0.J264WUrRySpKiClFCin7zN8XW4spc2PVVLwkqN7_ipY";
+    private static final String CLIENT_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJaaWRhbmUiLCJ1c2VyIjoiQ2xpZW50Iiwicm9sZSI6IkNMSUVOVCIsImlhdCI6MTQ2Njc5NjgyMiwiZXhwIjo0NjIyNDcwNDIyfQ.GfqS0Rr4W3-fAsz8gXssbBVR3pqOIuUaM9r5BI0dWZs";
     private static Connection conn;
 
     @BeforeAll

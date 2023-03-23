@@ -1,6 +1,6 @@
 package com.innowise.task03;
 
-import com.innowise.task03.listener.HttpMethod;
+import com.innowise.task03.handler.HttpMethod;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

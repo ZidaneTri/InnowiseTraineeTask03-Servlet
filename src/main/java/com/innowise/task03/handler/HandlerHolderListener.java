@@ -1,11 +1,10 @@
-package com.innowise.task03.listener;
+package com.innowise.task03.handler;
 
 import com.innowise.task03.exception.HandlerCreationException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.lang.reflect.InvocationTargetException;
 
 @WebListener
 public class HandlerHolderListener implements ServletContextListener {

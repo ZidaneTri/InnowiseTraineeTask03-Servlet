@@ -1,4 +1,4 @@
-package com.innowise.task03.listener;
+package com.innowise.task03.handler;
 
 
 import com.innowise.task03.Controller;
@@ -9,7 +9,6 @@ import org.reflections.Reflections;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
